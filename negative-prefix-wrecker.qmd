@@ -1,0 +1,92 @@
+---
+title: "negative-prefix-wrecker"
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+```{r setup}
+source("datasheet.R")
+library(tidyverse)
+library(googlesheets4)
+library(googledrive)
+
+df <- read_sheet(datasheet)
+```
+
+```{r type-freq-count-by-WORD, message = FALSE, warning = FALSE}
+# googledrive::drive_create(name = "negative-prefix-productivity-count",
+#                           path = drive_folder,
+#                           type = "spreadsheet")
+# Created Drive file:
+# • negative-prefix-productivity-count <id: 1r1-Qa580axhEJ5V19LUp7x5BxwcLTe0QB6yuyBz-HCg>
+# With MIME type:
+# • application/vnd.google-apps.spreadsheet
+
+realised_prod_by_word <- df |> 
+  group_by(PREFIXES) |> 
+  summarise(n_type = n_distinct(WORD)) |> 
+  arrange(desc(n_type))
+
+googlesheets4::sheet_write(realised_prod_by_word, 
+                           ss = "1r1-Qa580axhEJ5V19LUp7x5BxwcLTe0QB6yuyBz-HCg",
+                           sheet = "Sheet1")
+
+realised_prod_by_word |> 
+  knitr::kable(col.names = c("Prefixes", "No. of word-types"))
+```
+
+
+
+```{r type-freq-count-by-ROOT, include = FALSE}
+realised_prod_by_root <- df |> 
+  group_by(PREFIXES) |> 
+  summarise(n_type = n_distinct(ROOT)) |> 
+  arrange(desc(n_type))
+realised_prod_by_root |> 
+  knitr::kable(col.names = c("Prefixes", "No. of roots"))
+```
+
+
+
+```{r type-freq-count-by-WORD-WORDCLASS}
+realised_prod_by_pos <- df |> 
+  select(PREFIXES, WORD_CLASS, WORD) |> 
+  distinct() |> 
+  count(PREFIXES, WORD_CLASS, name = "Count of word-type per word class") |> 
+  arrange(PREFIXES, desc(`Count of word-type per word class`))
+```
+
+
+
+
+```{r fig-type-freq-by-WORD-WORDCLASS}
+# googledrive::drive_mkdir("figures", path = drive_folder)
+# Created Drive file:
+# • figures <id: 1g1Cqsxno8hIwzniHqaj1GrfeiP0Pqcdn>
+# With MIME type:
+# • application/vnd.google-apps.folder
+
+realised_prod_by_pos |> 
+  ggplot(aes(x = PREFIXES,
+             y = `Count of word-type per word class`,
+             fill = WORD_CLASS)) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  labs(fill = "Word Class",
+       x = "Prefixes") +
+  theme_light(base_family = "serif") +
+  theme(legend.text = element_text(size = "12"),
+        legend.title = element_text(size = "16"),
+        axis.title.x.bottom = element_text(size = "16"),
+        axis.text.x.bottom = element_text(size = "12"))
+
+ggsave("figures/productivity-by-word-class.png", width = 6.5, height = 5,
+       units = "in", dpi = 300)
+
+googledrive::drive_upload("figures/productivity-by-word-class.png",
+                          path = drive_figures,
+                          name = "productivity-by-word-class.png")
+```
+
+
