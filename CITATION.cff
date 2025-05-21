@@ -1,0 +1,40 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Supplementary materials for the study of English negative
+  prefixes in the novel Wrecker
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Andie
+    family-names: Prasetyo
+    email: andiprazt4621@gmail.com
+    affiliation: Udayana University
+  - given-names: Gede Primahadi Wijaya
+    family-names: Rajeg
+    email: primahadi_wijaya@unud.ac.id
+    affiliation: Udayana University
+    orcid: 'https://orcid.org/0000-0002-2047-8621'
+  - given-names: Ketut Santi
+    family-names: Indriani
+    email: kt.santi.indriani@unud.ac.id
+    affiliation: Udayana University
+identifiers:
+  - type: doi
+    value: 10.17605/OSF.IO/HU9R2
+    description: Open Science Framework (OSF) repository
+repository-code: 'https://github.com/complexico/negative-prefix-wrecker'
+url: 'https://doi.org/10.17605/OSF.IO/HU9R2'
+keywords:
+  - negative prefixes
+  - English
+  - Morphology
+  - CompLexico
+  - Linguistics
+  - Morphological productivity
+license: CC-BY-NC-SA-4.0
+date-released: '2025-05-21'
